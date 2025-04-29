@@ -1,3 +1,3 @@
-module github.com/codecrafters-io/http-server-starter-go
+module github.com/md-talim/codecrafters-http-server-go
 
 go 1.24.0
