@@ -1,6 +1,8 @@
 package protocol
 
-import "io"
+import (
+	"io"
+)
 
 // WriteResponse formats and writes the given Response object to the writer.
 // It automatically calculates and adds the Content-Length header if not already present
@@ -11,7 +13,7 @@ func WriteResponse(writer io.Writer, res *Response) error {
 
 	for k, v := range res.Headers {
 		writer.Write([]byte(k))
-		writer.Write([]byte(":"))
+		writer.Write([]byte(": "))
 		writer.Write([]byte(v))
 		writer.Write([]byte("\r\n"))
 	}
