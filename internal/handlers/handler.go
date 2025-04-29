@@ -13,7 +13,7 @@ var routes = map[string]RequestHandler{
 func GetHandler(path string) RequestHandler {
 	handler, ok := routes[path]
 	if !ok {
-		return nil
+		return &NotFoundHandler{}
 	}
 	return handler
 }
