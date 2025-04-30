@@ -10,17 +10,18 @@ type RequestHandler interface {
 	Handle(req *protocol.Request) *protocol.Response
 }
 
-var routes = map[string]RequestHandler{
+var router = map[string]RequestHandler{
 	"/":           &RootHandler{},
 	"/echo/":      &EchoHandler{},
 	"/user-agent": &UserAgentHandler{},
+	"/files/":     &FilesHandler{},
 }
 
 func GetHandler(path string) RequestHandler {
 	if path == "/" {
 		return &RootHandler{}
 	}
-	for p, handler := range routes {
+	for p, handler := range router {
 		if p == "/" {
 			continue
 		}
