@@ -20,6 +20,7 @@ const (
 	HeaderUserAgent       = "User-Agent"
 	HeaderAcceptEncoding  = "Accept-Encoding"
 	HeaderContentEncoding = "Content-Encoding"
+	HeaderConnection      = "Connection"
 )
 
 // Common Content Types
@@ -28,9 +29,10 @@ const (
 	ContentTypeOctetStream = "application/octet-stream"
 )
 
-// Suppored Content Encodings
+// Suppored Header Values
 const (
 	ContentEncodingGzip = "gzip"
+	ConnectionClose     = "close"
 )
 
 // HTTP Version

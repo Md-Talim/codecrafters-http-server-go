@@ -32,7 +32,13 @@ func main() {
 // handleConnection manages a single client connection
 func handleConnection(conn net.Conn) {
 	defer conn.Close()
+	closeConnection := false
+
 	for {
+		if closeConnection {
+			break
+		}
+
 		fmt.Printf("Handling connection from %s\n", conn.RemoteAddr())
 
 		reader := bufio.NewReader(conn)
@@ -42,8 +48,15 @@ func handleConnection(conn net.Conn) {
 			return
 		}
 
+		if req.GetHeader(protocol.HeaderConnection) == protocol.ConnectionClose {
+			closeConnection = true
+		}
+
 		handler := handlers.GetHandler(req.GetPath())
 		res := handler.Handle(req)
+		if closeConnection {
+			res.Headers[protocol.HeaderConnection] = protocol.ConnectionClose
+		}
 		protocol.WriteResponse(conn, res)
 	}
 }
