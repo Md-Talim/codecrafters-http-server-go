@@ -17,11 +17,10 @@ func (req *Request) GetBody() string {
 }
 
 func (req *Request) GetHeader(name string) string {
-	header, ok := req.headers[name]
-	if !ok {
-		return ""
+	if header, ok := req.headers[name]; ok {
+		return header
 	}
-	return header
+	return ""
 }
 
 func (req *Request) GetMethod() string {

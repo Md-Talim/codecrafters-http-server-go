@@ -148,3 +148,47 @@ func TestRespondWithBody(t *testing.T) {
 		t.Errorf("Unexpected response for GET %s:\nExpected:\n%q\nGot:\n%q", requestPath, expectedResponse, actualResponse)
 	}
 }
+
+// TestReadHeader tests that server must respond with a 200 response that contains the following parts:
+// Content-Type header set to text/plain.
+// Content-Length header set to the length of the User-Agent value.
+// Message body set to the User-Agent value.
+func TestReadHeader(t *testing.T) {
+	conn, err := net.DialTimeout("tcp", "localhost:4221", 1*time.Second)
+	if err != nil {
+		t.Fatalf("Failed to connect to server: %v", err)
+	}
+	defer conn.Close()
+
+	endpoint := "/user-agent"
+	request := fmt.Sprintf("GET %s HTTP/1.1\r\nHost: localhost:4221\r\nUser-Agent: foobar/1.2.3\r\nAccept: */*\r\n\r\n", endpoint)
+	_, err = conn.Write([]byte(request))
+	if err != nil {
+		t.Fatalf("Failed to send request: %v", err)
+	}
+
+	buffer := make([]byte, 1024)                                // Use a reasonably sized buffer
+	err = conn.SetReadDeadline(time.Now().Add(2 * time.Second)) // Set a deadline
+	if err != nil {
+		t.Fatalf("Failed to set read deadline: %v", err)
+	}
+
+	n, err := conn.Read(buffer)
+	if err != nil {
+		// Check if it's a timeout error
+		if netErr, ok := err.(net.Error); ok && netErr.Timeout() {
+			t.Fatalf("Timeout reading response: Server might not have responded in time. %v", err)
+		}
+		t.Fatalf("Failed to read response: %v", err)
+	}
+	if n == 0 {
+		t.Fatal("Read 0 bytes from connection, expected a response.")
+	}
+
+	expectedResponse := "HTTP/1.1 200 OK\r\nContent-Type: text/plain\r\nContent-Length: 12\r\n\r\nfoobar/1.2.3"
+	actualResponse := buffer[:n] // Get the slice containing the actual data read
+
+	if !bytes.Equal(actualResponse, []byte(expectedResponse)) {
+		t.Errorf("Unexpected response for GET %s:\nExpected:\n%q\nGot:\n%q", endpoint, expectedResponse, actualResponse)
+	}
+}

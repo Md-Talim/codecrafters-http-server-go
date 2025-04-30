@@ -39,6 +39,6 @@ func ParseRequest(reader *bufio.Reader) (*Request, error) {
 		method:  statusLine[0],
 		path:    statusLine[1],
 		version: statusLine[2],
-		headers: make(Headers),
+		headers: headers,
 	}, nil
 }

@@ -11,8 +11,9 @@ type RequestHandler interface {
 }
 
 var routes = map[string]RequestHandler{
-	"/":      &RootHandler{},
-	"/echo/": &EchoHandler{},
+	"/":           &RootHandler{},
+	"/echo/":      &EchoHandler{},
+	"/user-agent": &UserAgentHandler{},
 }
 
 func GetHandler(path string) RequestHandler {
