@@ -1,5 +1,10 @@
 package protocol
 
+import (
+	"slices"
+	"strings"
+)
+
 type Headers map[string]string
 
 type Request struct {
@@ -29,11 +34,14 @@ func (req *Request) GetPath() string {
 	return req.path
 }
 
-func (req *Request) AcceptEncodingHeader() (string, bool) {
-	if header, ok := req.headers[HeaderAcceptEncoding]; ok && header == ContentEncodingGzip {
-		return header, true
+func (req *Request) IsGzipAccepted() bool {
+	if header, ok := req.headers[HeaderAcceptEncoding]; ok {
+		schemes := strings.Split(header, ", ")
+		if slices.Contains(schemes, ContentEncodingGzip) {
+			return true
+		}
 	}
-	return "", false
+	return false
 }
 
 type Response struct {

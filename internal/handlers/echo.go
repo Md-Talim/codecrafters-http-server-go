@@ -23,7 +23,7 @@ func (e *EchoHandler) Handle(req *protocol.Request) *protocol.Response {
 	res.Headers[protocol.HeaderContentType] = protocol.ContentTypeTextPlain
 	res.Headers[protocol.HeaderContentLength] = strconv.Itoa(len(str))
 
-	if _, ok := req.AcceptEncodingHeader(); ok {
+	if req.IsGzipAccepted() {
 		compressedBody := compressData(str)
 		res.Body = string(compressedBody)
 		res.Headers[protocol.HeaderContentEncoding] = protocol.ContentEncodingGzip
