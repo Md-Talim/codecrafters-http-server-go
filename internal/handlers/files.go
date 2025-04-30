@@ -23,14 +23,14 @@ func (r *FilesHandler) Handle(req *protocol.Request) *protocol.Response {
 
 	notFoundHandler := &NotFoundHandler{}
 
-	if method == "GET" {
+	if method == protocol.MethodGet {
 		res, err := getFile(filename)
 		if err != nil {
 			fmt.Fprint(os.Stderr, err)
 			return notFoundHandler.Handle(req)
 		}
 		return res
-	} else if method == "POST" {
+	} else if method == protocol.MethodPost {
 		res, err := createFile(filename, body)
 		if err != nil {
 			fmt.Fprint(os.Stderr, err)
@@ -69,14 +69,14 @@ func getFile(filename string) (*protocol.Response, error) {
 	}
 
 	res := &protocol.Response{
-		Status:  "200 OK",
+		Status:  protocol.StatusOK,
 		Version: protocol.Version,
 		Headers: make(map[string]string),
 		Body:    string(file),
 	}
 
-	res.Headers["Content-Type"] = "application/octet-stream"
-	res.Headers["Content-Length"] = strconv.Itoa(len(file))
+	res.Headers[protocol.HeaderContentType] = protocol.ContentTypeOctetStream
+	res.Headers[protocol.HeaderContentLength] = strconv.Itoa(len(file))
 
 	return res, nil
 }
@@ -108,7 +108,7 @@ func createFile(filename string, content string) (*protocol.Response, error) {
 	}
 
 	res := &protocol.Response{
-		Status:  "201 Created",
+		Status:  protocol.StatusCreated,
 		Version: protocol.Version,
 		Headers: make(map[string]string),
 	}

@@ -2,8 +2,6 @@ package protocol
 
 type Headers map[string]string
 
-var Version = "HTTP/1.1"
-
 type Request struct {
 	method  string
 	path    string

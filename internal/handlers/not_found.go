@@ -6,7 +6,7 @@ type NotFoundHandler struct{}
 
 func (r *NotFoundHandler) Handle(req *protocol.Request) *protocol.Response {
 	return &protocol.Response{
-		Status:  "404 Not Found",
+		Status:  protocol.StatusNotFound,
 		Version: protocol.Version,
 		Headers: nil,
 		Body:    "Not Found",

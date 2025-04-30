@@ -13,14 +13,14 @@ func (e *EchoHandler) Handle(req *protocol.Request) *protocol.Response {
 	str := path[len("/echo/"):]
 
 	res := &protocol.Response{
-		Status:  "200 OK",
+		Status:  protocol.StatusOK,
 		Version: protocol.Version,
 		Headers: make(map[string]string),
 		Body:    str,
 	}
 
-	res.Headers["Content-Type"] = "text/plain"
-	res.Headers["Content-Length"] = strconv.Itoa(len(str))
+	res.Headers[protocol.HeaderContentType] = protocol.ContentTypeTextPlain
+	res.Headers[protocol.HeaderContentLength] = strconv.Itoa(len(str))
 
 	return res
 }

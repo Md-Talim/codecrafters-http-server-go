@@ -32,14 +32,9 @@ func ParseRequest(reader *bufio.Reader) (*Request, error) {
 		headers[strings.TrimSpace(header[0])] = strings.TrimSpace(header[1])
 	}
 
-	// TODO: Check for Content-Lenght header
-	// If Content-Length header exists and > 0,
-	// read exactly that many bytes for the body
-
-	var contentLength int
 	var body []byte
 	if headers["Content-Length"] != "" {
-		contentLength, err = strconv.Atoi(headers["Content-Length"])
+		contentLength, err := strconv.Atoi(headers["Content-Length"])
 		if err != nil {
 			return nil, errors.New("Invalid Content-Length header: " + err.Error())
 		}

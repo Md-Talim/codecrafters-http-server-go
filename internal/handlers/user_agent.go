@@ -9,17 +9,17 @@ import (
 type UserAgentHandler struct{}
 
 func (r *UserAgentHandler) Handle(req *protocol.Request) *protocol.Response {
-	userAgent := req.GetHeader("User-Agent")
+	userAgent := req.GetHeader(protocol.HeaderUserAgent)
 
 	res := &protocol.Response{
-		Status:  "200 OK",
+		Status:  protocol.StatusOK,
 		Version: protocol.Version,
 		Headers: make(map[string]string),
 		Body:    userAgent,
 	}
 
-	res.Headers["Content-Type"] = "text/plain"
-	res.Headers["Content-Length"] = strconv.Itoa(len(userAgent))
+	res.Headers[protocol.HeaderContentType] = protocol.ContentTypeTextPlain
+	res.Headers[protocol.HeaderContentLength] = strconv.Itoa(len(userAgent))
 
 	return res
 }

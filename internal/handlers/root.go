@@ -6,7 +6,7 @@ type RootHandler struct{}
 
 func (r *RootHandler) Handle(req *protocol.Request) *protocol.Response {
 	return &protocol.Response{
-		Status:  "200 OK",
+		Status:  protocol.StatusOK,
 		Version: protocol.Version,
 		Headers: nil,
 		Body:    "",
