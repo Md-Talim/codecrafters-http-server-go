@@ -32,24 +32,18 @@ func main() {
 // handleConnection manages a single client connection
 func handleConnection(conn net.Conn) {
 	defer conn.Close()
-	fmt.Printf("Handling connection from %s\n", conn.RemoteAddr())
+	for {
+		fmt.Printf("Handling connection from %s\n", conn.RemoteAddr())
 
-	reader := bufio.NewReader(conn)
+		reader := bufio.NewReader(conn)
+		req, err := protocol.ParseRequest(reader)
+		if err != nil {
+			fmt.Println("Error parsing request:", err)
+			return
+		}
 
-	req, err := protocol.ParseRequest(reader)
-	if err != nil {
-		fmt.Println("Error parsing request:", err)
-		return
-	}
-
-	handler := handlers.GetHandler(req.GetPath())
-	if handler == nil {
-		return
-	}
-
-	res := handler.Handle(req)
-	err = protocol.WriteResponse(conn, res)
-	if err != nil {
-		fmt.Println("Error writing response:", err)
+		handler := handlers.GetHandler(req.GetPath())
+		res := handler.Handle(req)
+		protocol.WriteResponse(conn, res)
 	}
 }
