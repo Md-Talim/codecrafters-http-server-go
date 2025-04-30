@@ -15,9 +15,11 @@ const (
 
 // HTTP Header Keys
 const (
-	HeaderContentLength = "Content-Length"
-	HeaderContentType   = "Content-Type"
-	HeaderUserAgent     = "User-Agent"
+	HeaderContentLength   = "Content-Length"
+	HeaderContentType     = "Content-Type"
+	HeaderUserAgent       = "User-Agent"
+	HeaderAcceptEncoding  = "Accept-Encoding"
+	HeaderContentEncoding = "Content-Encoding"
 )
 
 // Common Content Types
@@ -26,5 +28,10 @@ const (
 	ContentTypeOctetStream = "application/octet-stream"
 )
 
+// Suppored Content Encodings
+const (
+	ContentEncodingGzip = "gzip"
+)
+
 // HTTP Version
-var Version = "HTTP/1.1"
+const Version = "HTTP/1.1"

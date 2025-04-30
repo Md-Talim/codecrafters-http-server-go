@@ -29,6 +29,13 @@ func (req *Request) GetPath() string {
 	return req.path
 }
 
+func (req *Request) AcceptEncodingHeader() (string, bool) {
+	if header, ok := req.headers[HeaderAcceptEncoding]; ok && header == ContentEncodingGzip {
+		return header, true
+	}
+	return "", false
+}
+
 type Response struct {
 	Status  string
 	Version string
