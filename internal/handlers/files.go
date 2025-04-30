@@ -127,10 +127,17 @@ func getDirectory() (string, error) {
 	var directory string
 	args := os.Args
 	if len(args) <= 2 {
-		return "", errors.New("--directory flag is missing")
+		return "", errors.New("not enough arguments")
 	}
-	if args[1] == "--directory" {
-		directory = args[2]
+
+	for i, arg := range args {
+		if arg == "--directory" {
+			if i+1 < len(args) {
+				directory = args[i+1]
+			} else {
+				return "", errors.New("missing directory path")
+			}
+		}
 	}
 
 	return directory, nil
